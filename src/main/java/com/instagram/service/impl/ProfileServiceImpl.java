@@ -1,6 +1,5 @@
 package com.instagram.service.impl;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.instagram.dto.ProfileDTO;
@@ -10,18 +9,13 @@ import com.instagram.repository.ProfileRepository;
 import com.instagram.service.ProfileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -76,22 +70,21 @@ public class ProfileServiceImpl implements ProfileService {
 
 
     private List<ProfileDTO> loadFollowersFromMultipartFile(MultipartFile file) throws IOException {
+
         ObjectMapper objectMapper = new ObjectMapper();
+        log.info("Parsing root element from JSON file from MultipartFile");
 
-        // Parsiramo root element JSON fajla iz MultipartFile-a
         JsonNode rootNode = objectMapper.readTree(file.getInputStream());
-        System.out.println("Učitani JSON: " + rootNode.toString());
+        log.info("Loaded JSON: " + rootNode.toString());
 
-        // Kreiramo listu za čuvanje vrednosti polja
         List<ProfileDTO> followers = new ArrayList<>();
 
-        // Iteriramo kroz svaki objekat u JSON nizu
         if (rootNode.isArray()) {
             for (JsonNode node : rootNode) {
-                // Iz svakog objekta uzimamo "string_list_data" polje
+                // retrieve "string_list_data" field
                 JsonNode stringListDataNode = node.path("string_list_data");
 
-                // Proveravamo da li "string_list_data" postoji i da li je niz
+                // Check does "string_list_data" exist and is it array
                 if (stringListDataNode.isArray()) {
                     for (JsonNode followerNode : stringListDataNode) {
                         String username = followerNode.path("value").asText();
@@ -107,11 +100,11 @@ public class ProfileServiceImpl implements ProfileService {
                         followers.add(profileDTO);
                     }
                 } else {
-                    System.out.println("'string_list_data' nije pronađen ili nije niz.");
+                    log.error("'string_list_data' not found.");
                 }
             }
         } else {
-            System.out.println("Root JSON nije niz.");
+            log.error("Root JSON is not array.");
         }
 
         return followers;
