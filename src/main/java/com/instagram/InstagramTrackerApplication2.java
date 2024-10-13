@@ -28,7 +28,7 @@
 //
 //    public static void loadFollowersFromFile() throws Exception {
 //
-//        String previousFollowersFile = "jsonFiles/previousFollowers.json"; // ubaci putanje
+//        String previousFollowersFile = "jsonFiles/newFollowersData.json"; // ubaci putanje
 //        String currentFollowersFile = "jsonFiles/currentFollowers.json";
 //        String following = "jsonFiles/following.json";
 //        String pendingRequests = "jsonFiles/pending_follow_requests.json";

@@ -17,11 +17,13 @@ import java.util.Date;
 public class Profile {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nickname;
     private String link;
     private Long timestamp;
+    @Column(name = "createdAt")
     private Date createdAt;
+    @Column(name = "modifiedAt")
     private Date modifiedAt;
 }
