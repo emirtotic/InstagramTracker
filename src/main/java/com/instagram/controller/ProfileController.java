@@ -43,6 +43,18 @@ public class ProfileController {
 
         List<ProfileDTO> profileDTOS = profileService.doesntFollowBack(file);
 
+        return ResponseEntity.status(HttpStatus.OK).body(profileDTOS);
+    }
+
+    @PostMapping("/sentRequests")
+    public ResponseEntity<List<ProfileDTO>> sentRequests(@RequestParam("file") MultipartFile file) {
+
+        if (file.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        }
+
+        List<ProfileDTO> profileDTOS = profileService.sentRequests(file);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(profileDTOS);
     }
 }

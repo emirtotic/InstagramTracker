@@ -9,10 +9,12 @@ import com.instagram.repository.ProfileRepository;
 import com.instagram.service.ProfileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -68,6 +70,14 @@ public class ProfileServiceImpl implements ProfileService {
 
     }
 
+    @Override
+    public List<ProfileDTO> sentRequests(MultipartFile file) {
+        try {
+            return loadUnansweredFollowRequestsFromFile(file);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private List<ProfileDTO> loadFollowersFromMultipartFile(MultipartFile file) throws IOException {
 
@@ -108,6 +118,49 @@ public class ProfileServiceImpl implements ProfileService {
         }
 
         return followers;
+    }
+
+    private static List<ProfileDTO> loadUnansweredFollowRequestsFromFile(MultipartFile file) throws Exception {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        // Parsiramo root element JSON fajla
+        JsonNode rootNode = objectMapper.readTree(file.getInputStream());
+        System.out.println("Učitani JSON: " + rootNode.toString());
+
+        List<ProfileDTO> followRequests = new ArrayList<>();
+
+        JsonNode followRequestsNode = rootNode.path("relationships_follow_requests_sent");
+
+        if (followRequestsNode.isArray()) {
+            for (JsonNode requestNode : followRequestsNode) {
+
+                JsonNode stringListDataNode = requestNode.path("string_list_data");
+
+                if (stringListDataNode.isArray()) {
+                    for (JsonNode followerNode : stringListDataNode) {
+                        String username = followerNode.path("value").asText();
+                        String href = followerNode.path("href").asText();
+                        Long timestamp = followerNode.path("timestamp").asLong();
+                        ProfileDTO profileDTO = ProfileDTO.builder()
+                                .nickname(username)
+                                .link(href)
+                                .timestamp(timestamp)
+                                .createdAt(new Date())
+                                .modifiedAt(new Date())
+                                .build();
+                        followRequests.add(profileDTO);
+                    }
+                } else {
+                    System.out.println("'string_list_data' nije pronađen ili nije niz.");
+                }
+            }
+        } else {
+            System.out.println("Polje 'relationships_follow_requests_sent' nije niz ili nije pronađeno.");
+        }
+
+        return followRequests;
+
     }
 
 }

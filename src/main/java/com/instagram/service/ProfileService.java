@@ -8,6 +8,8 @@ import java.util.List;
 public interface ProfileService {
 
     List<ProfileDTO> loadNewFollowersData(MultipartFile file);
+
     List<ProfileDTO> doesntFollowBack(MultipartFile file);
 
+    List<ProfileDTO> sentRequests(MultipartFile file);
 }
