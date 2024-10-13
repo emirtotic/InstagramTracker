@@ -55,6 +55,6 @@ public class ProfileController {
 
         List<ProfileDTO> profileDTOS = profileService.sentRequests(file);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(profileDTOS);
+        return ResponseEntity.status(HttpStatus.OK).body(profileDTOS);
     }
 }
