@@ -2,6 +2,12 @@ package com.instagram.controller;
 
 import com.instagram.dto.ProfileDTO;
 import com.instagram.service.ProfileService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,13 +17,20 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
+@Tag(name = "Instagram Profile Management", description = "Operations related to Instagram follower management")
 @RequestMapping("/api/v1/instagram")
 public class ProfileController {
 
     @Autowired
     private ProfileService profileService;
 
-    @PostMapping("/loadNewFollowersData")
+    @Operation(summary = "Load all followers", description = "Uploads a file with new follower data and returns a list of profiles")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Followers data successfully uploaded",
+                    content = @Content(mediaType = "text/plain")),
+            @ApiResponse(responseCode = "400", description = "Invalid file input", content = @Content)
+    })
+    @PostMapping(value = "/loadNewFollowersData", consumes = "multipart/form-data", produces = "text/plain")
     public ResponseEntity<String> loadNewFollowersData(@RequestParam("file") MultipartFile file) {
 
         if (file.isEmpty()) {
@@ -31,7 +44,12 @@ public class ProfileController {
         return ResponseEntity.status(HttpStatus.CREATED).body(sb.toString().trim());
     }
 
-    @PostMapping("/doesntFollowBack")
+    @Operation(summary = "Find users who don't follow back", description = "Uploads a file with follower data and returns a list of users who don't follow back")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProfileDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid file input", content = @Content)
+    })
+    @PostMapping(value = "/doesntFollowBack", consumes = "multipart/form-data", produces = "application/json")
     public ResponseEntity<List<ProfileDTO>> doesntFollowBack(@RequestParam("file") MultipartFile file) {
 
         if (file.isEmpty()) {
@@ -42,7 +60,12 @@ public class ProfileController {
         return ResponseEntity.status(HttpStatus.OK).body(profileDTOS);
     }
 
-    @PostMapping("/sentRequests")
+    @Operation(summary = "Get list of sent follow requests", description = "Uploads a file with follower data and returns a list of sent follow requests")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProfileDTO.class))),
+            @ApiResponse(responseCode = "204", description = "No content", content = @Content)
+    })
+    @PostMapping(value = "/sentRequests", consumes = "multipart/form-data", produces = "application/json")
     public ResponseEntity<List<ProfileDTO>> sentRequests(@RequestParam("file") MultipartFile file) {
 
         if (file.isEmpty()) {
@@ -53,6 +76,11 @@ public class ProfileController {
         return ResponseEntity.status(HttpStatus.OK).body(profileDTOS);
     }
 
+    @Operation(summary = "Remove a follower", description = "Removes a follower by their username")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Follower removed successfully", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Invalid username provided", content = @Content)
+    })
     @DeleteMapping("/removeFollower/{username}")
     public ResponseEntity<String> removeFollower(@PathVariable("username") String username) {
 
