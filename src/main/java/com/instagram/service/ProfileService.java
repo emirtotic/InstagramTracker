@@ -12,4 +12,6 @@ public interface ProfileService {
     List<ProfileDTO> doesntFollowBack(MultipartFile file);
 
     List<ProfileDTO> sentRequests(MultipartFile file);
+
+    void removeFollower(String username);
 }

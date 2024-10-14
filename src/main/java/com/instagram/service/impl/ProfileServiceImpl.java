@@ -9,15 +9,15 @@ import com.instagram.repository.ProfileRepository;
 import com.instagram.service.ProfileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -76,6 +76,20 @@ public class ProfileServiceImpl implements ProfileService {
             return loadUnansweredFollowRequestsFromFile(file);
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void removeFollower(String username) {
+
+        Optional<Profile> profile = Optional.ofNullable(profileRepository.findByNickname(username));
+
+        if (profile.isPresent()) {
+            profileRepository.deleteByNickname(username);
+            log.info("User " + profile.get().getNickname() + " has been removed from DB.");
+        } else {
+            throw new RuntimeException("User with name " + username + " is not found in database.");
         }
     }
 
