@@ -39,7 +39,6 @@ public class ProfileController {
         }
 
         List<ProfileDTO> profileDTOS = profileService.doesntFollowBack(file);
-
         return ResponseEntity.status(HttpStatus.OK).body(profileDTOS);
     }
 
@@ -51,7 +50,6 @@ public class ProfileController {
         }
 
         List<ProfileDTO> profileDTOS = profileService.sentRequests(file);
-
         return ResponseEntity.status(HttpStatus.OK).body(profileDTOS);
     }
 
