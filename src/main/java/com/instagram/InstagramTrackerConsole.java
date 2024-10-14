@@ -22,13 +22,11 @@ public class InstagramTrackerConsole {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
     public static void loadFollowersFromFile() throws Exception {
 
-        String previousFollowersFile = "jsonFiles/newFollowersData.json"; // ubaci putanje
+        String previousFollowersFile = "jsonFiles/newFollowersData.json";
         String currentFollowersFile = "jsonFiles/currentFollowers.json";
         String following = "jsonFiles/following.json";
         String pendingRequests = "jsonFiles/pending_follow_requests.json";
@@ -43,32 +41,25 @@ public class InstagramTrackerConsole {
         List<String> doesntFollowBack = whoDoesntFollowBack(currentFollowers, followingList);
         List<String> pendingRequestsList = pendingRequests(loadPendingRequests);
 
-
     }
 
     private static List<String> loadFollowersFromFile(String filePath) throws Exception {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        // Koristimo ClassPathResource da čitamo fajl iz resources foldera
         ClassPathResource resource = new ClassPathResource(filePath);
         try (InputStream inputStream = resource.getInputStream()) {
             System.out.println("Fajl uspešno otvoren: " + filePath);
 
-            // Parsiramo root element JSON fajla
             JsonNode rootNode = objectMapper.readTree(inputStream);
             System.out.println("Učitani JSON: " + rootNode.toString());
 
-            // Kreiramo listu za čuvanje vrednosti "value" polja
             List<String> followerUsernames = new ArrayList<>();
 
-            // Iteriramo kroz svaki objekat u JSON nizu
             if (rootNode.isArray()) {
                 for (JsonNode node : rootNode) {
-                    // Iz svakog objekta uzimamo "string_list_data" polje
                     JsonNode stringListDataNode = node.path("string_list_data");
 
-                    // Proveravamo da li "string_list_data" postoji i da li je niz
                     if (stringListDataNode.isArray()) {
                         for (JsonNode followerNode : stringListDataNode) {
                             String username = followerNode.path("value").asText();
@@ -89,28 +80,21 @@ public class InstagramTrackerConsole {
     private static List<String> loadFollowingUsersFromFile(String filePath) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
 
-        // Koristimo ClassPathResource da čitamo fajl iz resources foldera
         ClassPathResource resource = new ClassPathResource(filePath);
         try (InputStream inputStream = resource.getInputStream()) {
-            System.out.println("Fajl uspešno otvoren: " + filePath);
+            System.out.println("Fajl uspesno otvoren: " + filePath);
 
-            // Parsiramo root element JSON fajla
             JsonNode rootNode = objectMapper.readTree(inputStream);
-            System.out.println("Učitani JSON: " + rootNode.toString());
+            System.out.println("Ucitani JSON: " + rootNode.toString());
 
-            // Kreiramo listu za čuvanje vrednosti "value" polja
             List<String> followerUsernames = new ArrayList<>();
 
-            // Pristupamo polju "relationships_following", koje je niz
             JsonNode relationshipsFollowingNode = rootNode.path("relationships_following");
 
-            // Proveravamo da li "relationships_following" postoji i da li je niz
             if (relationshipsFollowingNode.isArray()) {
                 for (JsonNode relationshipNode : relationshipsFollowingNode) {
-                    // Uzimamo polje "string_list_data" iz svakog objekta u "relationships_following"
                     JsonNode stringListDataNode = relationshipNode.path("string_list_data");
 
-                    // Proveravamo da li "string_list_data" postoji i da li je niz
                     if (stringListDataNode.isArray()) {
                         for (JsonNode followerNode : stringListDataNode) {
                             String username = followerNode.path("value").asText();
@@ -211,28 +195,21 @@ public class InstagramTrackerConsole {
     private static List<String> loadUnansweredFollowRequestsFromFile(String filePath) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
 
-        // Koristimo ClassPathResource da čitamo fajl iz resources foldera
         ClassPathResource resource = new ClassPathResource(filePath);
         try (InputStream inputStream = resource.getInputStream()) {
             System.out.println("Fajl uspešno otvoren: " + filePath);
 
-            // Parsiramo root element JSON fajla
             JsonNode rootNode = objectMapper.readTree(inputStream);
             System.out.println("Učitani JSON: " + rootNode.toString());
 
-            // Kreiramo listu za čuvanje vrednosti "value" polja
             List<String> followRequestUsernames = new ArrayList<>();
 
-            // Pristupamo polju "relationships_follow_requests_sent", koje je niz
             JsonNode followRequestsNode = rootNode.path("relationships_follow_requests_sent");
 
-            // Proveravamo da li "relationships_follow_requests_sent" postoji i da li je niz
             if (followRequestsNode.isArray()) {
                 for (JsonNode requestNode : followRequestsNode) {
-                    // Uzimamo polje "string_list_data" iz svakog objekta u "relationships_follow_requests_sent"
                     JsonNode stringListDataNode = requestNode.path("string_list_data");
 
-                    // Proveravamo da li "string_list_data" postoji i da li je niz
                     if (stringListDataNode.isArray()) {
                         for (JsonNode followerNode : stringListDataNode) {
                             String username = followerNode.path("value").asText();
