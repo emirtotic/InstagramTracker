@@ -15,3 +15,4 @@ docker run -p 8080:8080 instagram-tracker:latest
 
 -- WARNING
 In application.properties file for jdbc and flyway url put your IP address
+To see your IP run in terminal: ipconfig getifaddr en0
