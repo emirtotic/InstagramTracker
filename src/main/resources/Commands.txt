@@ -1,0 +1,14 @@
+-- Give mysql privileges
+CREATE USER 'root'@'%' IDENTIFIED BY '12345678';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
+FLUSH PRIVILEGES;
+
+-- clean package
+mvn clean package
+
+
+-- Build docker container
+docker build -t instagram-tracker:latest .
+
+-- Run the App
+docker run -p 8080:8080 instagram-tracker:latest
