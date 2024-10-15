@@ -138,9 +138,9 @@ public class ProfileServiceImpl implements ProfileService {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        // Parsiramo root element JSON fajla
+        // Parsing of root element in JSON
         JsonNode rootNode = objectMapper.readTree(file.getInputStream());
-        System.out.println("Učitani JSON: " + rootNode.toString());
+        System.out.println("Loaded JSON: " + rootNode.toString());
 
         List<ProfileDTO> followRequests = new ArrayList<>();
 
@@ -166,11 +166,11 @@ public class ProfileServiceImpl implements ProfileService {
                         followRequests.add(profileDTO);
                     }
                 } else {
-                    System.out.println("'string_list_data' nije pronađen ili nije niz.");
+                    System.out.println("'string_list_data' is not found or it is not an array.");
                 }
             }
         } else {
-            System.out.println("Polje 'relationships_follow_requests_sent' nije niz ili nije pronađeno.");
+            System.out.println("Field 'relationships_follow_requests_sent' is not found.");
         }
 
         return followRequests;
