@@ -6,7 +6,6 @@ FLUSH PRIVILEGES;
 -- clean package
 mvn clean package
 
-
 -- Build docker container
 docker build -t instagram-tracker:latest .
 
