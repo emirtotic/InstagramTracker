@@ -49,10 +49,10 @@ public class InstagramTrackerConsole {
 
         ClassPathResource resource = new ClassPathResource(filePath);
         try (InputStream inputStream = resource.getInputStream()) {
-            System.out.println("Fajl uspešno otvoren: " + filePath);
+            System.out.println("File found: " + filePath);
 
             JsonNode rootNode = objectMapper.readTree(inputStream);
-            System.out.println("Učitani JSON: " + rootNode.toString());
+            System.out.println("Loaded JSON: " + rootNode.toString());
 
             List<String> followerUsernames = new ArrayList<>();
 
@@ -66,11 +66,11 @@ public class InstagramTrackerConsole {
                             followerUsernames.add(username);
                         }
                     } else {
-                        System.out.println("'string_list_data' nije pronađen ili nije niz.");
+                        System.out.println("'string_list_data' is not found or it is not an array.");
                     }
                 }
             } else {
-                System.out.println("Root JSON nije niz.");
+                System.out.println("Root JSON is not array.");
             }
 
             return followerUsernames;
@@ -82,10 +82,10 @@ public class InstagramTrackerConsole {
 
         ClassPathResource resource = new ClassPathResource(filePath);
         try (InputStream inputStream = resource.getInputStream()) {
-            System.out.println("Fajl uspesno otvoren: " + filePath);
+            System.out.println("File opened: " + filePath);
 
             JsonNode rootNode = objectMapper.readTree(inputStream);
-            System.out.println("Ucitani JSON: " + rootNode.toString());
+            System.out.println("Loaded JSON: " + rootNode.toString());
 
             List<String> followerUsernames = new ArrayList<>();
 
@@ -101,11 +101,11 @@ public class InstagramTrackerConsole {
                             followerUsernames.add(username);
                         }
                     } else {
-                        System.out.println("'string_list_data' nije pronađen ili nije niz.");
+                        System.out.println("'string_list_data' not found or it is not an array.");
                     }
                 }
             } else {
-                System.out.println("Polje 'relationships_following' nije niz ili nije pronađeno.");
+                System.out.println("Polje 'relationships_following' not found or it is not an array.");
             }
 
             return followerUsernames;
@@ -123,13 +123,13 @@ public class InstagramTrackerConsole {
         }
 
         if (result.isEmpty()) {
-            System.out.println("Niko vas nije otpratio.");
+            System.out.println("No new unfollowers.");
         } else {
-            System.out.println("Sledeći nalozi su vas otpratili:");
+            System.out.println("Unfollowers:");
             result.forEach(System.out::println);
         }
 
-        System.out.println("Ukupan broj ljudi koji su vas otpratili: " + result.size());
+        System.out.println("Total count of unfollowers: " + result.size());
 
         return result;
     }
@@ -145,13 +145,13 @@ public class InstagramTrackerConsole {
         }
 
         if (result.isEmpty()) {
-            System.out.println("Niko vas nije zapratio.");
+            System.out.println("No new followers.");
         } else {
-            System.out.println("Sledeći nalozi su vas zapratili:");
+            System.out.println("New followers:");
             result.forEach(System.out::println);
         }
 
-        System.out.println("Broj ljudi koji vas je zapratio: " + result.size());
+        System.out.println("Total new followers: " + result.size());
 
         return result;
     }
@@ -167,13 +167,13 @@ public class InstagramTrackerConsole {
         }
 
         if (result.isEmpty()) {
-            System.out.println("Svi koje pratis, prate i tebe.");
+            System.out.println("All followers follow you.");
         } else {
-            System.out.println("Sledeći nalozi vas ne prate a vi ih pratite:");
+            System.out.println("Doesn't follow back:");
             result.forEach(System.out::println);
         }
 
-        System.out.println("Ukupan broj ljudi koji vas ne prate: " + result.size());
+        System.out.println("Total: " + result.size());
 
         return result;
     }
@@ -181,13 +181,13 @@ public class InstagramTrackerConsole {
     private static List<String> pendingRequests(List<String> pendingRequests) {
 
         if (pendingRequests.isEmpty()) {
-            System.out.println("Nema neodgovorenih zahteva.");
+            System.out.println("No pending requests.");
         } else {
-            System.out.println("Sledeći nalozi nisu prihvatili da ih pratite:");
+            System.out.println("Pending requests:");
             pendingRequests.forEach(System.out::println);
         }
 
-        System.out.println("Ukupan broj ljudi koji nisu prihvatili pracenje: " + pendingRequests.size());
+        System.out.println("Total pending requests: " + pendingRequests.size());
 
         return pendingRequests;
     }
@@ -197,10 +197,10 @@ public class InstagramTrackerConsole {
 
         ClassPathResource resource = new ClassPathResource(filePath);
         try (InputStream inputStream = resource.getInputStream()) {
-            System.out.println("Fajl uspešno otvoren: " + filePath);
+            System.out.println("File loaded: " + filePath);
 
             JsonNode rootNode = objectMapper.readTree(inputStream);
-            System.out.println("Učitani JSON: " + rootNode.toString());
+            System.out.println("Loaded JSON: " + rootNode.toString());
 
             List<String> followRequestUsernames = new ArrayList<>();
 
@@ -216,11 +216,11 @@ public class InstagramTrackerConsole {
                             followRequestUsernames.add(username);
                         }
                     } else {
-                        System.out.println("'string_list_data' nije pronađen ili nije niz.");
+                        System.out.println("'string_list_data' not found or it is not an array.");
                     }
                 }
             } else {
-                System.out.println("Polje 'relationships_follow_requests_sent' nije niz ili nije pronađeno.");
+                System.out.println("Field 'relationships_follow_requests_sent' not found or it is not an array.");
             }
 
             return followRequestUsernames;
