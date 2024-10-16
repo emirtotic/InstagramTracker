@@ -12,6 +12,9 @@ docker build -t instagram-tracker:latest .
 
 -- Run the App
 docker run -p 8080:8080 instagram-tracker:latest
+ili
+docker run --name my-instagram-tracker -p 8080:8080 instagram-tracker:latest
+
 
 -- WARNING
 In application.properties file for jdbc and flyway url put your IP address
